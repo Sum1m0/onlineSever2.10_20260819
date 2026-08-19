@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线客服助理 V2.10</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <main class="workbench">
+    <header class="topbar">
+      <div class="brand-mark">智</div>
+      <nav class="workspace-tabs"><button class="active" id="serviceTab">智能客服</button><button class="hidden" id="businessTab">业务办理页面 <span id="closeBusiness">×</span></button></nav>
+      <div class="top-actions"><button class="top-icon">⌗</button><button class="top-icon">⌕</button><span class="notification-dot"></span><div class="admin-avatar">超</div><strong>超级管理员</strong></div>
+    </header>
+
+    <div class="main-grid" id="serviceWorkspace">
+      <section class="conversation-panel">
+        <div class="conversation-head"><div class="customer-avatar">张</div><div><div class="customer-name">张女士</div><div class="customer-meta">四川成都 · APP　接入 00:26</div></div><button class="ghost-button">客户资料</button><button class="end-button" id="endSession">结束会话</button></div>
+        <div class="quality-area">
+          <div class="quality-row"><span>质检总结果：</span><span class="quality-tag" id="qualityTag">质检中</span></div>
+          <div class="quality-summary hidden" id="qualitySummary"></div>
+        </div>
+        <div class="message-list" id="messageList">
+          <div class="message-line customer"><div class="mini-avatar">张</div><div class="message-wrap"><div class="message-meta">张女士　14:32</div><div class="message-bubble">你好，我想问这个月流量扣得特别快，和我的使用情况对不上。</div></div></div>
+          <div class="message-line agent"><div class="message-wrap"><div class="message-meta">坐席 · 陈静　14:33</div><div class="message-bubble">您好，我先结合您本月的流量使用情况为您核实。</div></div><div class="mini-avatar agent-avatar">静</div></div>
+          <div class="message-line customer"><div class="mini-avatar">张</div><div class="message-wrap"><div class="message-meta">张女士　14:36</div><div class="message-bubble">昨晚一下扣了5个G，这个肯定不对。</div></div></div>
+          <div class="message-line agent"><div class="message-wrap"><div class="message-meta">坐席 · 陈静　14:37</div><div class="message-bubble">系统记录肯定不会出错，应该就是您手机产生的流量。</div><div class="qc-warning"><strong>⚠ 质检提醒 · 业务口径风险：</strong>存在未经核实的绝对化表述，容易引发客户不满。建议改为先核对系统侧与终端侧记录，再向客户说明。</div></div><div class="mini-avatar agent-avatar">静</div></div>
+          <div class="listening-hint hidden" id="listeningHint"><span class="pulse-dot"></span> 在线客服助理正在结合客户最新回复分析当前场景与上下文…</div>
+        </div>
+        <div class="composer">
+          <textarea id="replyInput" placeholder="请输入回复内容" aria-label="坐席回复输入框"></textarea>
+            <div class="composer-actions"><span class="reply-tip">坐席发送后，客户将自动继续回复</span><span class="shortcut">Ctrl + Enter 发送</span><button class="save-button">存为常用语</button><button class="send-button" id="sendReply">发送</button></div>
+        </div>
+      </section>
+
+      <section class="assistant-panel">
+        <div class="panel-title-row"><div class="assistant-title"><span class="assistant-symbol">AI</span> 在线客服助理</div><span class="live-status"><span></span> 实时辅助中</span></div>
+        <div class="assistant-scroll">
+          <div class="flow-panel compact-flow" id="flowPanel">
+          <div class="flow-heading"><div><span class="flow-icon">流</span><strong id="flowTitle">流量争议处理流程</strong></div><span class="sop-tag">SOP</span></div>
+          <div class="flow-steps" id="flowSteps">
+            <button class="flow-step done" data-step="1" title="结合多轮对话识别流量争议或费用争议"><span class="step-number">1</span><span class="step-title">识别<br>场景</span></button>
+            <button class="flow-step done" data-step="2" title="明确业务对象、异常时间、用量或费用项目"><span class="step-number">2</span><span class="step-title">确认<br>范围</span></button>
+            <button class="flow-step current" data-step="3" title="核对套餐、共享用量、达量状态及相关记录"><span class="step-number">3</span><span class="step-title">调用<br>诊断</span></button>
+            <button class="flow-step" data-step="4" title="匹配客户描述与诊断结果，定位主要原因"><span class="step-number">4</span><span class="step-title">形成<br>结论</span></button>
+            <button class="flow-step" data-step="5" title="生成核对话术、解释口径和后续处理建议"><span class="step-number">5</span><span class="step-title">推荐<br>处理</span></button>
+          </div>
+          <div class="flow-note" id="flowNote"><b>当前第3步：</b>调用诊断能力，核对套餐、共享用量、达量状态及相关记录。<span>可点击前序步骤回退</span></div>
+          </div>
+          <div class="section-label"><span>✦ 话术推荐 · 默认展示最新，向上滚动查看历史</span><button class="switch-button" id="openScene">切换场景</button></div>
+          <div class="recommendation-timeline" id="recommendationTimeline">
+            <div class="thinking-box hidden" id="thinkingBox"><div class="thinking-orbit"><i></i><i></i><i></i></div><strong>正在重新分析</strong><p>结合当前完整对话、最新消息与所选场景生成推荐话术</p></div>
+            <div class="recommendation-list" id="recommendationList"></div>
+          </div>
+          <div class="summary-card"><div class="summary-head"><span>会</span> 实时会话小结 <em id="summaryStatus">实时更新</em></div><p><b>主要问题：</b><span id="summaryProblem">客户反馈昨晚流量一次性减少约5GB，与实际使用情况不符。</span></p><p><b>已确认信息：</b><span id="summaryKnown">当前为流量争议，争议时段为昨晚。</span></p><p><b>当前阶段：</b><span id="summaryStage">正在核对争议时段的使用记录及终端统计差异。</span></p><p><b>待处理：</b><span id="summaryPending">确认高流量应用记录，结合诊断结果继续解释处理。</span></p></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="business-workspace hidden" id="businessWorkspace">
+      <div class="business-page-head"><div><span class="business-page-icon">业</span><div><h1 id="businessPageTitle">流量争议核查与处理</h1><p>当前页面由原业务系统承载，客户及会话参数已自动带入</p></div></div><span class="system-badge">综合业务受理系统</span></div>
+      <div class="business-page-body">
+        <div class="business-left">
+          <article class="business-card">
+            <div class="business-card-title">客户与号码信息</div>
+            <div class="info-grid"><label>客户姓名<strong>张女士</strong></label><label>服务号码<strong>189****6218</strong></label><label>归属地区<strong>四川成都</strong></label><label>当前套餐<strong>畅享套餐 129元</strong></label><label>客户状态<strong class="green-text">正常在网</strong></label><label>账户余额<strong>86.32元</strong></label></div>
+          </article>
+          <article class="business-card">
+            <div class="business-card-title">智能诊断结果 <span>已完成</span></div>
+            <div class="diagnosis-result"><div><small>诊断编码</small><b>LL007</b></div><div><small>争议时段</small><b>昨晚 22:00—23:00</b></div><div><small>系统侧用量</small><b>5.02 GB</b></div><div><small>终端侧用量</small><b>0.46 GB</b></div></div>
+            <div class="diagnosis-conclusion"><b>诊断结论</b><p>终端统计与系统侧流量记录存在较明显差异，建议发起流量详单复核。</p></div>
+          </article>
+          <article class="business-card processing-log"><div class="business-card-title">处理记录</div><p><span>14:36</span> 客户反馈昨晚流量一次性减少约5GB</p><p><span>14:38</span> 已核对套餐、共享用量及达量状态</p><p><span>14:40</span> 客户确认未开启热点或高流量应用</p></article>
+        </div>
+        <div class="business-right">
+          <article class="business-card form-card">
+            <div class="business-card-title" id="businessFormTitle">流量争议复核受理</div>
+            <label>业务类型<span>*</span><select id="businessType"><option>流量争议复核</option><option>费用争议复核</option></select></label>
+            <label>服务号码<span>*</span><input value="189****6218" readonly></label>
+            <label>争议时间<span>*</span><input value="2026-08-17 22:00—23:00"></label>
+            <label>争议内容<span>*</span><textarea>客户反馈流量一次性减少约5GB，终端统计与系统侧记录存在差异，申请进一步核查。</textarea></label>
+            <label>处理方式<span>*</span><select><option>发起流量详单复核</option><option>登记费用争议核查</option><option>转后台人工核验</option></select></label>
+            <label>联系号码<input value="189****6218"></label>
+            <label>备注<textarea placeholder="请输入补充说明"></textarea></label>
+            <div class="business-form-actions"><button class="secondary-business" id="returnService">返回客服会话</button><button class="primary-business" id="submitBusiness">提交受理</button></div>
+            <div class="business-submit-result hidden" id="businessSubmitResult">✓ 受理成功，受理单号：SC202608180026</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="modal-backdrop hidden" id="sceneModal"><div class="scene-modal"><div class="modal-head"><strong>切换业务场景</strong><button id="closeScene">×</button></div><p>切换后保留完整聊天记录，并结合已有上下文重新生成推荐话术。</p><button class="scene-option selected" data-scene="流量争议"><span>流</span><div><strong>流量争议</strong><small>核对流量用量、套餐与异常时段</small></div><i>当前</i></button><button class="scene-option" data-scene="费用争议"><span>费</span><div><strong>费用争议</strong><small>核对账单、收费项目与订购记录</small></div><i>选择</i></button></div></div>
+    <div class="toast hidden" id="toast"></div>
+  </main>
+  <script src="assets/app.js"></script>
+</body>
+</html>
